@@ -26,7 +26,12 @@ namespace MidWare.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("SignIn", "Account");
+            if(string.IsNullOrEmpty(HttpContext.Session.GetString("accountId")))
+            {
+                return RedirectToAction("SignIn", "Account");
+               
+            }
+            return RedirectToAction("GetProjectFeeds");
         }
 
         public IActionResult About()
@@ -83,9 +88,9 @@ namespace MidWare.Controllers
 
         public IActionResult CreateProjectFeed()
         {
-            var vm = new 
+            var vm = new CreateProjectFeedModel() 
             {
-                AccountTypes = new List<ProjectTypeModel>
+                ProjectTypes = new List<ProjectTypeModel>
                     {
                         new ProjectTypeModel {Id = 1, ProjectType = "Mitigation"},
                         new ProjectTypeModel {Id = 2, ProjectType = "Litigation"},
@@ -93,6 +98,9 @@ namespace MidWare.Controllers
                         new ProjectTypeModel {Id = 4, ProjectType = "Restoration"},
                     }
             };
+
+            
+
             return View(vm);
         }
 

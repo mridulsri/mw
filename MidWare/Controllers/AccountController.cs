@@ -9,6 +9,8 @@ using Domain.NoSql.Data.DomainRepository;
 using Domain.NoSql.Data.DomainEntites;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Microsoft.eShopWeb.Web.Controllers
 {
@@ -82,6 +84,16 @@ namespace Microsoft.eShopWeb.Web.Controllers
                 HttpContext.Session.SetString("accountType", Convert.ToString(result.Type));
                 HttpContext.Session.SetString("accountName", Convert.ToString(result.Name));
 
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Id.ToString()));
+                identity.AddClaim(new Claim(ClaimTypes.Name, result.Name));
+                identity.AddClaim(new Claim(ClaimTypes.Email, result.Email));
+                identity.AddClaim(new Claim(ClaimTypes.Role, result.Type.ToString()));
+                var principal = new ClaimsPrincipal(identity);
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = model.RememberMe });
+
+
+                
                 if (result.Type == 1) // carrier
                     return RedirectToAction("Index", "Carrier");
                 else // others
@@ -142,6 +154,15 @@ namespace Microsoft.eShopWeb.Web.Controllers
             }
             // If we got this far, something failed, redisplay form
             return View(model);
+        }
+
+        [HttpGet]
+        [Route("SignOut")]
+        [AllowAnonymous]
+        public IActionResult SignOut(string returnUrl = null)
+        {
+            HttpContext.SignOutAsync();
+            return RedirectToAction("SignIn");
         }
 
         private IActionResult RedirectToLocal(string returnUrl)

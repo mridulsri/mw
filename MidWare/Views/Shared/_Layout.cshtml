@@ -34,17 +34,9 @@
             <div class="navbar-collapse collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="CreateProjectFeed">Create Feed</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="MyFeed">My Feeds</a></li>
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-                    }
-                    else if(User.Identity.IsAuthenticated)
-                    {
-                        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-
-                    }
+                    <li><a asp-area="" asp-controller="Home" asp-action="CreateProjectFeed">Add Job</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="MyFeed">My Jobs</a></li>
+                    <li><a asp-area="" asp-controller="Account" asp-action="SignOut">SignOut</a></li>
 
                 </ul>
             </div>

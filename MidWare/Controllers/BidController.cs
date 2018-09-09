@@ -13,6 +13,7 @@ using Domain.NoSql.Data.DomainEntites;
 namespace MidWare.Controllers
 {
     // [Route("[controller]/[action]")]
+    [Authorize]
     public class BidController : Controller
     {
         private readonly IBidRepository _repoBid;
