@@ -1,4 +1,5 @@
 ﻿using Domain.NoSql.Data.DomainEntites;
+using Domain.NoSql.Data.DomainRepository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,7 @@ namespace MidWare.Models
         public CreateProjectFeedModel()
         {
             ProjectTypes = new List<ProjectTypeModel>();
+
         }
         [Required]
         [Display(Name = "Type")]
@@ -41,22 +43,25 @@ namespace MidWare.Models
         [Display(Name = "Details")]
         public string Details { get; set; }
 
-        [Required]
+       // [Required]
         [Display(Name = "JobStatus")]
         public string JobStatus { get; set; }
 
-        [Required]
+        //[Required]
         [Display(Name = "AssignedTo")]
         public string AssignedTo { get; set; }
 
-        
+
         public IEnumerable<ProjectTypeModel> ProjectTypes { set; get; }
     }
 
     public class ProjectFeedModel
     {
+        private readonly IAccountRepository _repo;
         public ProjectFeedModel()
         {
+            _repo = new AccountRepository();
+
             Account = new AccountModel()
             {
                 Rating = 3.5,
@@ -68,6 +73,8 @@ namespace MidWare.Models
 
         public ProjectFeedModel(ProjectFeed projectFeed)
         {
+            _repo = new AccountRepository();
+
             Type = projectFeed.Type;
             Title = projectFeed.Title;
             SkillLevel = projectFeed.SkillLevel;
@@ -78,19 +85,18 @@ namespace MidWare.Models
             Type = projectFeed.Type;
             Id = projectFeed.Id.ToString();
             CreatedById = projectFeed.CreatedById;
-            AssignTo = Convert.ToString(projectFeed.AssignedTo);
+            AssignTo = projectFeed.AssignedTo;
 
             CreatedDate = projectFeed.CreatedDate;
             DueDate = DueDate;
 
+            var acc = _repo.GetUserById(projectFeed.CreatedById);
 
+            Account = new AccountModel(acc);
+            Account.Rating = 3.5;
+            Account.IsVerified = true;
+            Account.IsPaymentVerified = true;
 
-            Account = new AccountModel()
-            {
-                Rating = 3.5,
-                IsVerified = true,
-                IsPaymentVerified = true
-            };
             Bids = new List<BidViewModel>();
             if (projectFeed.Bids != null)
             {

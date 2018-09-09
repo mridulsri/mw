@@ -11,11 +11,12 @@ using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MidWare.Extention;
 
 namespace Microsoft.eShopWeb.Web.Controllers
 {
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly IAccountRepository _repo;
@@ -28,15 +29,6 @@ namespace Microsoft.eShopWeb.Web.Controllers
         [Route("Detail/{id}")]
         public IActionResult Get(string id)
         {
-            var loggedUser = LoggedUser();
-            if (string.IsNullOrEmpty(id))
-            {
-                if (loggedUser.AccountType == 1) // carrier
-                    return RedirectToAction("Index", "Carrier");
-                else // others
-                    return RedirectToAction("GetProjectFeeds", "Home");
-            }
-
             var account = _repo.GetUserById(id);
 
             var model = new AccountModel(account);
@@ -86,7 +78,13 @@ namespace Microsoft.eShopWeb.Web.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Role, result.Type.ToString()));
                 var principal = new ClaimsPrincipal(identity);
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = model.RememberMe });
-                
+
+                LoggedInUser.Id = result.Id.ToString();
+                LoggedInUser.Name = result.Name;
+                LoggedInUser.Email = result.Email;
+                LoggedInUser.AccountType = result.Type;
+
+
                 if (result.Type == 1) // carrier
                     return RedirectToAction("Index", "Carrier");
                 else // others
@@ -122,6 +120,15 @@ namespace Microsoft.eShopWeb.Web.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel model, string returnUrl = null)
         {
+            model.AccountTypes = new List<AccountTypeModel>
+                    {
+                        new AccountTypeModel {Id = 1, AccountType = "Carrier"},
+                        new AccountTypeModel {Id = 2, AccountType = "Mitigation"},
+                        new AccountTypeModel {Id = 3, AccountType = "Litigation"},
+                        new AccountTypeModel {Id = 4, AccountType = "Adjuster"},
+                        new AccountTypeModel {Id = 5, AccountType = "Restoration"},
+                    };
+
             if (ModelState.IsValid)
             {
                 var user = _repo.GetUserByEmail(model.Email);
@@ -145,6 +152,8 @@ namespace Microsoft.eShopWeb.Web.Controllers
                     }
                 }
             }
+
+
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -155,6 +164,10 @@ namespace Microsoft.eShopWeb.Web.Controllers
         public IActionResult SignOut(string returnUrl = null)
         {
             HttpContext.SignOutAsync();
+            LoggedInUser.Id = null;
+            LoggedInUser.Name = null;
+            LoggedInUser.Email = null;
+            LoggedInUser.AccountType = 0;
             return RedirectToAction("SignIn");
         }
 
@@ -180,20 +193,32 @@ namespace Microsoft.eShopWeb.Web.Controllers
 
         private CurrentUser LoggedUser()
         {
-            
+            if (HttpContext == null)
+                return null;
             var claims = HttpContext.User.Claims;
             var obj = new CurrentUser();
             foreach (var claim in claims)
             {
                 if (claim.Type == ClaimTypes.NameIdentifier)
+                {
                     obj.Id = claim.Value;
+                    LoggedInUser.Id = obj.Id;
+                }
                 if (claim.Type == ClaimTypes.Name)
+                {
                     obj.Name = claim.Value;
+                    LoggedInUser.Name = obj.Name;
+                }
                 if (claim.Type == ClaimTypes.Role)
+                {
                     obj.AccountType = Convert.ToInt32(claim.Value);
+                    LoggedInUser.AccountType = obj.AccountType;
+                }
                 if (claim.Type == ClaimTypes.Email)
+                {
                     obj.Email = claim.Value;
-
+                    LoggedInUser.Email = obj.Email;
+                }
             }
             return obj;
         }

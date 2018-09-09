@@ -9,11 +9,12 @@ using Domain.NoSql.Data.DomainRepository;
 using Domain.NoSql.Data.DomainEntites;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MidWare.Controllers
 {
     // [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IProjectFeedRepository _repo;
@@ -23,21 +24,40 @@ namespace MidWare.Controllers
         {
             _repo = new ProjectFeedRepository();
             _accRepo = new AccountRepository();
+
+            
         }
 
         public IActionResult Index()
         {
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("SignIn", "Account");
+            }
             var loggedUser = LoggedUser();
+            ViewData["accId"] = loggedUser.Id;
+            ViewData["accType"] = loggedUser.AccountType;
             if (string.IsNullOrEmpty(loggedUser.Id))
             {
                 return RedirectToAction("SignIn", "Account");
-               
+
             }
-            return RedirectToAction("GetProjectFeeds");
+            if(loggedUser.AccountType ==1)
+            {
+                return RedirectToAction("Index", "Carrier");
+            }
+            else
+            {
+                return RedirectToAction("GetProjectFeeds");
+            }
+            
         }
 
         public IActionResult GetProjectFeeds()
         {
+            var loggedUser = LoggedUser();
+            ViewData["accId"] = loggedUser.Id;
+            ViewData["accType"] = loggedUser.AccountType;
             var model = new List<ProjectFeedModel>();
             var list = _repo.GetProjectFeeds();
 
@@ -48,7 +68,7 @@ namespace MidWare.Controllers
                     model.Add(new ProjectFeedModel(item));
                 }
                 ViewData["Message"] = "No Feeds Available.";
-                
+
             }
             return View(@"/Views/Home/ProjectFeedList.cshtml", model);
         }
@@ -58,9 +78,19 @@ namespace MidWare.Controllers
         public ActionResult MyFeed()
         {
             var loggedUser = LoggedUser();
-            var accountType = HttpContext.Session.GetString("accountType");
+            ViewData["accId"] = loggedUser.Id;
+            ViewData["accType"] = loggedUser.AccountType;
             var model = new List<ProjectFeedModel>();
-            var list = _repo.GetProjectFeedByType(Convert.ToInt32(accountType));
+            List<ProjectFeed> list = null;
+            if(loggedUser.AccountType == 1)
+            {
+                list = _repo.GetProjectFeedCreatedBy(loggedUser.Id);
+            }
+            else
+            {
+                list = _repo.GetAwardedProjectByAccountId(loggedUser.Id);
+            }
+            
 
             if (list != null)
             {
@@ -76,7 +106,7 @@ namespace MidWare.Controllers
 
         public IActionResult CreateProjectFeed()
         {
-            var vm = new CreateProjectFeedModel() 
+            var vm = new CreateProjectFeedModel()
             {
                 ProjectTypes = new List<ProjectTypeModel>
                     {
@@ -87,7 +117,7 @@ namespace MidWare.Controllers
                     }
             };
 
-            
+
 
             return View(vm);
         }
@@ -97,6 +127,14 @@ namespace MidWare.Controllers
         public IActionResult CreateProjectFeed(CreateProjectFeedModel model)
         {
             ViewData["Message"] = "Create Feed page.";
+
+            model.ProjectTypes = new List<ProjectTypeModel>
+                    {
+                        new ProjectTypeModel {Id = 1, ProjectType = "Mitigation"},
+                        new ProjectTypeModel {Id = 2, ProjectType = "Litigation"},
+                        new ProjectTypeModel {Id = 3, ProjectType = "Adjuster"},
+                        new ProjectTypeModel {Id = 4, ProjectType = "Restoration"},
+                    };
 
             if (!ModelState.IsValid)
             {
@@ -126,7 +164,7 @@ namespace MidWare.Controllers
             var result = _repo.AddProject(projectDto);
             if (result)
             {
-                return RedirectToAction("GetProjectFeeds");
+                return RedirectToAction("Index", "Carrier");
             }
             return View(@"/Views/Home/CreateProjectFeed.cshtml", model);
         }
@@ -150,7 +188,7 @@ namespace MidWare.Controllers
 
                 model.Account = new AccountModel(account);
             }
-                      
+
 
             return View(@"/Views/Home/ProjectFeedDetail.cshtml", model);
         }
@@ -190,20 +228,32 @@ namespace MidWare.Controllers
 
         private CurrentUser LoggedUser()
         {
-
+            if (HttpContext == null)
+                return null;
             var claims = HttpContext.User.Claims;
             var obj = new CurrentUser();
             foreach (var claim in claims)
             {
                 if (claim.Type == ClaimTypes.NameIdentifier)
+                {
                     obj.Id = claim.Value;
+                    LoggedInUser.Id = obj.Id;
+                }
                 if (claim.Type == ClaimTypes.Name)
+                {
                     obj.Name = claim.Value;
+                    LoggedInUser.Name = obj.Name;
+                }
                 if (claim.Type == ClaimTypes.Role)
+                {
                     obj.AccountType = Convert.ToInt32(claim.Value);
+                    LoggedInUser.AccountType = obj.AccountType;
+                }
                 if (claim.Type == ClaimTypes.Email)
+                {
                     obj.Email = claim.Value;
-
+                    LoggedInUser.Email = obj.Email;
+                }
             }
             return obj;
         }
