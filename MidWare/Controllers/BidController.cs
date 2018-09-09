@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using MidWare.Models;
 using Domain.NoSql.Data.DomainRepository;
 using Domain.NoSql.Data.DomainEntites;
+using System.Security.Claims;
 
 namespace MidWare.Controllers
 {
@@ -75,50 +76,25 @@ namespace MidWare.Controllers
             return View("/Views/Home/ProjectFeedList.cshtml");
         }
 
-        // GET: Bid/Edit/5
-        public ActionResult Edit(int id)
+       
+        private CurrentUser LoggedUser()
         {
-            return View();
-        }
 
-        // POST: Bid/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
+            var claims = HttpContext.User.Claims;
+            var obj = new CurrentUser();
+            foreach (var claim in claims)
             {
-                // TODO: Add update logic here
+                if (claim.Type == ClaimTypes.NameIdentifier)
+                    obj.Id = claim.Value;
+                if (claim.Type == ClaimTypes.Name)
+                    obj.Name = claim.Value;
+                if (claim.Type == ClaimTypes.Role)
+                    obj.AccountType = Convert.ToInt32(claim.Value);
+                if (claim.Type == ClaimTypes.Email)
+                    obj.Email = claim.Value;
 
-                return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Bid/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Bid/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return obj;
         }
     }
 }

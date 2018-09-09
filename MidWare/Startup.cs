@@ -29,24 +29,12 @@ namespace MidWare
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }).AddCookie(options => { options.LoginPath = "/Login"; });
+            }).AddCookie(options => { options.LoginPath = "/Account/SignIn"; });
             services.AddMvc().AddRazorPagesOptions(options =>
             {
                 options.Conventions.AuthorizeFolder("/");
-                options.Conventions.AllowAnonymousToPage("/Login");
+                options.Conventions.AllowAnonymousToPage("/Account/SignIn");
             });
-
-            // Session imp.
-            services.AddDistributedMemoryCache();
-            services.AddSession(options =>
-            {
-                // Set a short timeout for easy testing.
-                // options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
-            });
-
-
 
             services.AddMvc();
             services.Configure<ApplicationSetting>(Configuration); //
@@ -67,7 +55,6 @@ namespace MidWare
 
             app.UseAuthentication();
             app.UseStaticFiles();
-            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -38,5 +38,10 @@ namespace MidWare.Models
         public string ConfirmPassword { get; set; }
 
         public IEnumerable<AccountTypeModel> AccountTypes { set; get; }
+
+        public RegisterViewModel()
+        {
+            AccountTypes = new List<AccountTypeModel>();
+        }
     }
 }

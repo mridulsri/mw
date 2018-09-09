@@ -28,10 +28,10 @@ namespace Microsoft.eShopWeb.Web.Controllers
         [Route("Detail/{id}")]
         public IActionResult Get(string id)
         {
-            var accountType = HttpContext.Session.GetString("accountType");
+            var loggedUser = LoggedUser();
             if (string.IsNullOrEmpty(id))
             {
-                if (Convert.ToInt32(accountType) == 1) // carrier
+                if (loggedUser.AccountType == 1) // carrier
                     return RedirectToAction("Index", "Carrier");
                 else // others
                     return RedirectToAction("GetProjectFeeds", "Home");
@@ -79,11 +79,6 @@ namespace Microsoft.eShopWeb.Web.Controllers
             if (result != null)
             {
                 // set session value
-                HttpContext.Session.SetString("accountId", Convert.ToString(result.Id));
-                HttpContext.Session.SetString("accountEmail", Convert.ToString(result.Email));
-                HttpContext.Session.SetString("accountType", Convert.ToString(result.Type));
-                HttpContext.Session.SetString("accountName", Convert.ToString(result.Name));
-
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, result.Id.ToString()));
                 identity.AddClaim(new Claim(ClaimTypes.Name, result.Name));
@@ -91,8 +86,6 @@ namespace Microsoft.eShopWeb.Web.Controllers
                 identity.AddClaim(new Claim(ClaimTypes.Role, result.Type.ToString()));
                 var principal = new ClaimsPrincipal(identity);
                 HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, new AuthenticationProperties { IsPersistent = model.RememberMe });
-
-
                 
                 if (result.Type == 1) // carrier
                     return RedirectToAction("Index", "Carrier");
@@ -183,6 +176,26 @@ namespace Microsoft.eShopWeb.Web.Controllers
             {
                 ModelState.AddModelError("", error.Description);
             }
+        }
+
+        private CurrentUser LoggedUser()
+        {
+            
+            var claims = HttpContext.User.Claims;
+            var obj = new CurrentUser();
+            foreach (var claim in claims)
+            {
+                if (claim.Type == ClaimTypes.NameIdentifier)
+                    obj.Id = claim.Value;
+                if (claim.Type == ClaimTypes.Name)
+                    obj.Name = claim.Value;
+                if (claim.Type == ClaimTypes.Role)
+                    obj.AccountType = Convert.ToInt32(claim.Value);
+                if (claim.Type == ClaimTypes.Email)
+                    obj.Email = claim.Value;
+
+            }
+            return obj;
         }
     }
 }

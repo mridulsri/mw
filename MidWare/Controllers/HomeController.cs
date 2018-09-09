@@ -8,6 +8,7 @@ using MidWare.Models;
 using Domain.NoSql.Data.DomainRepository;
 using Domain.NoSql.Data.DomainEntites;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace MidWare.Controllers
 {
@@ -26,27 +27,13 @@ namespace MidWare.Controllers
 
         public IActionResult Index()
         {
-            if(string.IsNullOrEmpty(HttpContext.Session.GetString("accountId")))
+            var loggedUser = LoggedUser();
+            if (string.IsNullOrEmpty(loggedUser.Id))
             {
                 return RedirectToAction("SignIn", "Account");
                
             }
             return RedirectToAction("GetProjectFeeds");
-        }
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-
-            return View();
-        }
-
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
         }
 
         public IActionResult GetProjectFeeds()
@@ -70,6 +57,7 @@ namespace MidWare.Controllers
         [Route("MyFeed")]
         public ActionResult MyFeed()
         {
+            var loggedUser = LoggedUser();
             var accountType = HttpContext.Session.GetString("accountType");
             var model = new List<ProjectFeedModel>();
             var list = _repo.GetProjectFeedByType(Convert.ToInt32(accountType));
@@ -114,11 +102,8 @@ namespace MidWare.Controllers
             {
                 return View(model);
             }
-
-            var accountId = HttpContext.Session.GetString("accountId");
-            var accountEmail = HttpContext.Session.GetString("accountEmail");
-
-            if (accountId == null)
+            var loggedUser = LoggedUser();
+            if (loggedUser.Id == null)
             {
                 return RedirectToAction("/Account/SignIn");
             }
@@ -133,8 +118,8 @@ namespace MidWare.Controllers
                 Address = model.Address,
                 Details = model.Details,
 
-                CreatedById = accountId,
-                CreatedByEmail = accountEmail
+                CreatedById = loggedUser.Id,
+                CreatedByEmail = loggedUser.Email
 
             };
 
@@ -201,6 +186,26 @@ namespace MidWare.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private CurrentUser LoggedUser()
+        {
+
+            var claims = HttpContext.User.Claims;
+            var obj = new CurrentUser();
+            foreach (var claim in claims)
+            {
+                if (claim.Type == ClaimTypes.NameIdentifier)
+                    obj.Id = claim.Value;
+                if (claim.Type == ClaimTypes.Name)
+                    obj.Name = claim.Value;
+                if (claim.Type == ClaimTypes.Role)
+                    obj.AccountType = Convert.ToInt32(claim.Value);
+                if (claim.Type == ClaimTypes.Email)
+                    obj.Email = claim.Value;
+
+            }
+            return obj;
         }
     }
 }

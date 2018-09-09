@@ -9,6 +9,10 @@ namespace MidWare.Models
 {
     public class CreateProjectFeedModel
     {
+        public CreateProjectFeedModel()
+        {
+            ProjectTypes = new List<ProjectTypeModel>();
+        }
         [Required]
         [Display(Name = "Type")]
         public int Type { get; set; }
@@ -45,6 +49,7 @@ namespace MidWare.Models
         [Display(Name = "AssignedTo")]
         public string AssignedTo { get; set; }
 
+        
         public IEnumerable<ProjectTypeModel> ProjectTypes { set; get; }
     }
 

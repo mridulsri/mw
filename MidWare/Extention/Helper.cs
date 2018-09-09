@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using MidWare.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MidWare.Extention
@@ -26,5 +29,7 @@ namespace MidWare.Extention
             var index = random.Next(1, 3);
             return arr2[index];
         }
+
+        
     }
 }
