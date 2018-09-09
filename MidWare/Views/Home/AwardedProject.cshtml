@@ -1,0 +1,31 @@
+﻿@model List<ProjectFeedModel>
+@{
+    ViewData["Title"] = "AwardedProject";
+    Layout = "~/Views/Shared/_Layout.cshtml";   
+}
+
+<div class="row">
+    <div class="col-sm-12" style="background:#fff; border-radius: 10px;">
+        @if (Model != null)
+        {
+            for (int i = 0; i < Model.Count(); i++)
+            {<div class="boxproject">
+                    <a class="titleproject" href="/Home/ProjectFeedDeatil/@Model[i].Id">@Model[i].Title</a>
+                    <p class="description">@Model[i].Details</p>
+                    <p class="description"><b>Posted By: </b>@Model[i].Name <b>on</b> @Model[i].CreatedDate</p>
+
+                    <span><b>SkillLevel</b>@Model[i].SkillLevel</span>
+                    <span><b>Rating</b><i class="glyphicon glyphicon-star"></i> @Model[i].Account.Rating</span>
+                    <span class="txtgreen"><b>Payment</b><i class="glyphicon glyphicon-usd"></i> @Model[i].Account.IsPaymentVerified</span>
+                    <span class="txtgreen"><b>Account</b><i class="glyphicon glyphicon-ok"></i> @Model[i].Account.IsVerified</span>
+                    <a class="btnview pull-right" href="/Home/ProjectFeedDeatil/@Model[i].Id">Mark Job Done!</a>
+
+
+                </div>
+
+            }
+        }
+
+    </div>
+</div>
+

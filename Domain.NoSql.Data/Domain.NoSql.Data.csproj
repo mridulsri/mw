@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Domain.NoSql.Data</AssemblyName>
+    <PackageId>Domain.NoSql.Data</PackageId>
+     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DomainEntites\PropertyDetail.cs" />
+    <Compile Remove="DomainEntites\USFips.cs" />
+    <Compile Remove="DomainRepository\PropertyDetailsRepository.cs" />
+    <Compile Remove="DomainRepository\UsFipsRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Bson" Version="2.7.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Driver.Core" Version="2.4.4" />
+    <PackageReference Include="MongoDB.Driver.GridFS" Version="2.4.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core.Common\Core.Common.csproj" />
+    <ProjectReference Include="..\CustomLogger\CustomLogger.csproj" />
+  </ItemGroup>
+
+</Project>

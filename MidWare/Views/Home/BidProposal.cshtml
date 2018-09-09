@@ -1,0 +1,41 @@
+﻿@model BidViewModel
+@{
+    ViewData["Title"] = "BidProposal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <section>
+                <form asp-controller="Bid" asp-action="BidProposal" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="BidValue" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="BidValue" class="form-control" />
+                            <span asp-validation-for="BidValue" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Duration" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Duration" class="form-control" />
+                            <span asp-validation-for="Duration" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Comment" class="col-md-2 control-label"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Comment" class="form-control" />
+                            <span asp-validation-for="Comment" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-default btn-brand btn-brand-big">SUBMIT</button>
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>

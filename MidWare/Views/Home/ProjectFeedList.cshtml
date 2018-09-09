@@ -1,0 +1,39 @@
+﻿
+@model List<ProjectFeedModel>
+@{
+    ViewData["Title"] = "ProjectFeedList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-12" style="background:#fff; border-radius: 0 0 10px 10px;">
+        <h3 class="ptitle">Job Listing</h3>
+        @if (Model != null)
+        {
+            for (int i = 0; i < Model.Count(); i++)
+            {<div class="boxproject">
+                    <a class="titleproject" href="/Home/ProjectFeedDeatil/@Model[i].Id">@Model[i].Title</a>
+                    <p class="description">@Model[i].Details</p>
+                    <p class="description"><b>Posted By: </b>@Model[i].Name <b>on</b> @Model[i].CreatedDate</p>
+
+                    <span><b>SkillLevel</b>@Model[i].SkillLevel</span>
+                    <span><b>Rating</b><i class="glyphicon glyphicon-star"></i> @Model[i].Account.Rating</span>
+                    <span class="txtgreen"><b>Payment Verified</b><i class="glyphicon glyphicon-usd"></i></span>
+                    <span class="txtgreen"><b>Account Verified</b><i class="glyphicon glyphicon-ok"></i></span>
+                    @if (@Model[i].CreatedById == Convert.ToString(ViewData["accountId"]))
+                    {
+                        <a class="btnview pull-right" href="/Home/ProjectFeedDeatil/@Model[i].Id">View Details</a>
+                    }
+                    else
+                    {
+                        <a class="btnview pull-right" href="/Bid/Details/@Model[i].Id">Submit Proposal</a>
+                    }
+                </div>
+
+            }
+        }
+
+    </div>
+</div>
+
+

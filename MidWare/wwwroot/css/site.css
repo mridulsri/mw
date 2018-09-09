@@ -1,0 +1,159 @@
+﻿body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+    background: #4c64f5;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+.signupimg {
+    background: #294764;
+}
+.signupimg h2{
+    font-size:36px;
+    margin : 0 30px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+    .signupimg p {
+        font-size: 12px;
+        margin: 15px 30px 30px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+.account-login-container h3 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #808080;
+    margin:50px 25px;
+    letter-spacing: 2px;
+}
+    .account-login-container h3 span {
+        display: block;
+        font-size: 12px;
+        padding-bottom: 10px;
+        letter-spacing: 2px;
+        color: #b3b3b3;
+    }
+.account-login-container .control-label{
+    font-size: 10px;
+    color: #b3b3b3;
+    letter-spacing: 1px;
+}
+.textinfo {
+    font-size: 12px;
+    padding-top: 12px;
+    color: #808080;
+}
+.check {
+    opacity: 1;
+    color: #000;
+    border: 1px solid #607D8B;
+}
+
+.box {
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+.boxproject {
+    margin: 25px 25px 50px;
+    position: relative;
+    -webkit-box-shadow: 0px 1px 10px 1px rgba(1, 0, 0, 0.25);
+    box-shadow: 0px 1px 10px 1px rgba(1, 0, 0, 0.25);
+    background: #e8f4ff;
+    border-radius: 2px;
+}
+
+    .boxproject a.titleproject {
+        font-size: 24px;
+        font-weight: 300;
+        line-height: 30px;
+        padding: 15px;
+        background: #fff;
+        margin: 0;
+        display: block;
+    }
+
+        .boxproject a.titleproject:hover {
+            text-decoration: none;
+            color: #294764;
+        }
+    .boxproject span{
+        font-size: 14px;
+        font-weight: 400;
+        display: inline-block;
+        padding:10px 15px;
+    }
+.boxproject span b {
+    display: block;
+    font-size: 10px;
+    font-weight: 400;
+    color: #b3b3b3;
+}
+.glyphicon-usd:before, .glyphicon-ok:before {
+    color: #05bb19;
+}
+.boxproject .btnview {
+    padding: 5px 15px;
+    background: #25c70b;
+    color: #fff;
+    border-radius: 15px;
+    margin: 12px 15px 0 0;
+}
+.glyphicon-star:before {
+    color: #ffcc00;
+}
+.description{
+    background: #fff;
+    font-size: 12px;
+    padding: 5px 15px 15px;
+    margin-bottom: 0;
+}
+.navbar-inverse {
+    background-color: #294764;
+    border-color: #080808;
+}
+.navbar-brand {
+    float: left;
+    height: 50px;
+    padding: 0 15px;
+    font-size: 18px;
+    line-height: 20px;
+}
+.ptitle {
+    margin: 30px 20px 20px;
+    font-weight: 700;
+    color: #162f47;
+}
