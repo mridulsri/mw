@@ -41,11 +41,11 @@ namespace MidWare.Models
         [Display(Name = "Details")]
         public string Details { get; set; }
 
-        [Required]
+       // [Required]
         [Display(Name = "JobStatus")]
         public string JobStatus { get; set; }
 
-        [Required]
+        //[Required]
         [Display(Name = "AssignedTo")]
         public string AssignedTo { get; set; }
 
