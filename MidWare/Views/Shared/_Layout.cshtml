@@ -28,7 +28,7 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">
-                    <img src="~/images/midware.png" style="height:50px;"/>
+                    <img src="~/images/midware.png" style="height:50px;" />
                 </a>
             </div>
             <div class="navbar-collapse collapse pull-right">
@@ -36,7 +36,16 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="CreateProjectFeed">Create Feed</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="MyFeed">My Feeds</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+                    }
+                    else if(User.Identity.IsAuthenticated)
+                    {
+                        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+
+                    }
+
                 </ul>
             </div>
         </div>
