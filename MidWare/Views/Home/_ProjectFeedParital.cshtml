@@ -1,0 +1,20 @@
+﻿@model ProjectFeedModel
+
+<div class="row">
+    <div class="col-sm-12" style="background:#fff; border-radius: 0 0 10px 10px;">
+        <h3 class="ptitle">Job Detail</h3>
+        @if (Model != null)
+        {
+            <div class="boxproject">
+                    <a class="titleproject" href="/Home/ProjectFeedDeatil/@Model.Id">@Model.Title</a>
+                    <p class="description">@Model.Details</p>
+                    <p class="description"><b>Posted By: </b>@Model.Name <b>on</b> @Model.CreatedDate</p>
+
+                    <span><b>SkillLevel</b>@Model.SkillLevel</span>
+                    <span><b>Rating</b><i class="glyphicon glyphicon-star"></i> @Model.Account.Rating</span>
+                    <span class="txtgreen"><b>Payment Verified</b><i class="glyphicon glyphicon-usd"></i></span>
+                    <span class="txtgreen"><b>Account Verified</b><i class="glyphicon glyphicon-ok"></i></span>
+                </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,17 @@
+﻿@model SubmitReportModel
+
+<div class="row">
+    <div class="col-sm-8">
+        @Html.Partial("_ProjectFeedParital.cshtml", Model.ProjectFeed)
+        
+        @Html.Partial("_SubmitReportPartial.cshtml", Model.AddReport)
+
+        @Html.Partial("_SubmitInvoicePartial.cshtml", Model.AddInvoice)
+
+
+    </div>
+    <div class="col-sm-4">
+        @Html.Partial("_NearByListingPartial.cshtml", Model.ProjectFeedList)
+    </div>
+</div>
+
