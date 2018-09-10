@@ -8,7 +8,7 @@
         {
             @Html.Partial("_SubmitReportPartial.cshtml", Model.AddReport)
         }
-        @if (new int[] { 2, 3, 4 }.Contains(MidWare.Models.LoggedInUser.AccountType))
+        @if (new int[] { 2, 3,5}.Contains(MidWare.Models.LoggedInUser.AccountType))
         {
             @Html.Partial("_SubmitInvoicePartial.cshtml", Model.AddInvoice)
         }
