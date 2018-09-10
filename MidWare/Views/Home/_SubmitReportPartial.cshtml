@@ -3,18 +3,25 @@
 <form asp-controller="Home" asp-action="SubmitReport" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="">
     <input type="hidden" asp-for="ProjectFeedId" />
     <div class="row">
-        <div class="form-group">
-            <label asp-for="Report" class="control-label"></label>
-            <textarea asp-for="Report"></textarea>
-            <span asp-validation-for="Report" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label class="control-label">Upload Invoice</label>
-            <input type="file" name="file" id="FileInput">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-block btn-primary">Submit</button>
+        <div class="col-sm-12 form-horizontal" style="background:#fff; border-radius: 0 0 10px 10px;">
+            <h3 class="ptitle">Submit Report</h3>
+            <div class="form-group">
+                <label asp-for="Report" class="control-label col-sm-2"></label>
+                <div class="col-sm-8">
+                    <textarea asp-for="Report" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Report" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Upload Invoice</label>
+                <div class="col-sm-10">
+                    <input type="file" name="file" id="FileInput" class=""></div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 col-sm-push-2">
+                    <button type="submit" class="btn btn-block btn-primary">Submit</button>
+                </div>
+            </div>
         </div>
     </div>
-
 </form>
