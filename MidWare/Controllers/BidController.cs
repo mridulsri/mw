@@ -100,10 +100,11 @@ namespace MidWare.Controllers
                 return View(model);
             }
             ViewData["ReturnUrl"] = returnUrl;
+            var loggedUser = LoggedUser();
             Bid param = new Bid();
             param.BidDate = DateTime.Now;
             //TODO: Add user information in BidBy
-            param.BidBy = HttpContext.Session.GetString("accountId");
+            param.BidBy = loggedUser.Id;
             //param.BidValue = model.BidValue;
             //param.Duration = model.Duration;
             param.Comment = model.Comment;
