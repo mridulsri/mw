@@ -26,7 +26,7 @@
                     }
                     @if (Model[i].Type == 3 && string.IsNullOrEmpty(Model[i].AssignTo) && Model[i].Account.Type != MidWare.Models.LoggedInUser.AccountType)
                     {
-                        <a class="btnview pull-right" asp-controller="Carrier" asp-action="assign" asp-route-id="@Model[i].Id" asp-route-accId="@MidWare.Models.LoggedInUser.Id">Accept</a>
+                        <a class="btnview pull-right" href="/Account/Assign/@Model[i].Id/@MidWare.Models.LoggedInUser.Id">Accept</a>
                     }
                     @if (Model[i].AssignTo == MidWare.Models.LoggedInUser.Id)
                     {
