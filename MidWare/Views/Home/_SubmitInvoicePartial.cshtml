@@ -1,20 +1,28 @@
 ﻿@model AddInvoice
 
 <form asp-controller="Home" asp-action="SubmitInvoice" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="">
-    <input type="hidden" asp-for="ProjectFeedId" />
+    <input type="hidden" asp-for="ProjectFeedId" class="form-horizontal" />
     <div class="row">
-        <div class="form-group">
-            <label asp-for="Invoice" class="control-label"></label>
-            <textarea asp-for="Invoice"></textarea>
-            <span asp-validation-for="Invoice" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label  class="control-label">Upload Invoice</label>
-             <input type="file"  name="file" id="FileInput">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-block btn-primary">Submit</button>
+        <div class="col-sm-12 form-horizontal" style="background:#fff; border-radius: 0 0 10px 10px;">
+            <h3 class="ptitle">Submit Invoice</h3>
+            <div class="form-group">
+                <label asp-for="Invoice" class="control-label col-sm-2"></label>
+                <div class="col-sm-8">
+                    <textarea asp-for="Invoice" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Invoice" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2">Upload Invoice</label>
+                <div class="col-sm-8">
+                    <input type="file" name="file" id="FileInput">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-10 col-sm-push-2">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
         </div>
     </div>
-
 </form>
