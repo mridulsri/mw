@@ -115,7 +115,7 @@ namespace Domain.NoSql.Data.DomainRepository
         {
             try
             {
-                return _collection.Find(x => x.AssignedTo == ObjectId.Parse(id)).ToList<ProjectFeed>().OrderByDescending(o => o.CreatedDate).ToList<ProjectFeed>();
+                return _collection.Find(x => x.AssignedTo == id).ToList<ProjectFeed>().OrderByDescending(o => o.CreatedDate).ToList<ProjectFeed>();
             }
             catch (Exception ex)
             {
@@ -156,7 +156,7 @@ namespace Domain.NoSql.Data.DomainRepository
             try
             {
                 var filter = Builders<ProjectFeed>.Filter.Eq("_id", ObjectId.Parse(projId));
-                var update = Builders<ProjectFeed>.Update.Push("assignto", accId);
+                var update = Builders<ProjectFeed>.Update.Set("assignedto", accId);
                 var result = _collection.UpdateOneAsync(filter, update).Result;
                 return true;
             }

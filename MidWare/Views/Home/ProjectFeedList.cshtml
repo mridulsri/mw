@@ -16,17 +16,21 @@
                     <p class="description">@Model[i].Details</p>
                     <p class="description"><b>Posted By: </b>@Model[i].Name <b>on</b> @Model[i].CreatedDate</p>
 
-                    <span><b>SkillLevel</b>@Model[i].SkillLevel</span>
+                    <span><b>Skill Set Required</b>@Model[i].SkillLevel</span>
                     <span><b>Rating</b><i class="glyphicon glyphicon-star"></i> @Model[i].Account.Rating</span>
                     <span class="txtgreen"><b>Payment Verified</b><i class="glyphicon glyphicon-usd"></i></span>
                     <span class="txtgreen"><b>Account Verified</b><i class="glyphicon glyphicon-ok"></i></span>
-                    @if (@Model[i].CreatedById == Convert.ToString(ViewData["accountId"]))
+                    @if (Model[i].CreatedById == MidWare.Models.LoggedInUser.Id)
                     {
                         <a class="btnview pull-right" href="/Home/ProjectFeedDeatil/@Model[i].Id">View Details</a>
                     }
-                    else
+                    @if (string.IsNullOrEmpty(Model[i].AssignTo) && Model[i].Account.Type != MidWare.Models.LoggedInUser.AccountType)
                     {
                         <a class="btnview pull-right" href="/Bid/Details/@Model[i].Id">Submit Proposal</a>
+                    }
+                    @if (Model[i].AssignTo == MidWare.Models.LoggedInUser.Id)
+                    {
+                        <a class="btnview pull-right" href="/Bid/Details/@Model[i].Id">Submit Report</a>
                     }
                 </div>
 

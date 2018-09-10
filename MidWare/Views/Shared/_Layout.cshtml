@@ -34,10 +34,21 @@
             <div class="navbar-collapse collapse pull-right">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="CreateProjectFeed">Add Job</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="MyFeed">My Jobs</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="SignOut">SignOut</a></li>
+                    @if (MidWare.Models.LoggedInUser.AccountType == 1)
+                    {
+                        <li><a asp-controller="Home" asp-action="CreateProjectFeed">Add Job</a></li>
+                    }
+                    @if (MidWare.Models.LoggedInUser.AccountType != 1)
+                    {
+                        <li><a asp-area="" asp-controller="Home" asp-action="MyFeed">My Jobs</a></li>
 
+                    }
+
+                    @if (User.Identity.IsAuthenticated && MidWare.Models.LoggedInUser.Id != null)
+                    {
+                        <li><a asp-controller="Account" asp-action="Detail" asp-route-id="@MidWare.Models.LoggedInUser.Id">@User.Identity.Name</a></li>
+                        <li><a asp-controller="Account" asp-action="SignOut">SignOut</a></li>
+                    }
                 </ul>
             </div>
         </div>

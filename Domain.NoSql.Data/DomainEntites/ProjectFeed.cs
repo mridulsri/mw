@@ -28,7 +28,7 @@ namespace Domain.NoSql.Data.DomainEntites
         public string CreatedById { get; set; }
         public string CreatedByEmail { get; set; }
 
-        public ObjectId AssignedTo { get; set; }
+        public string AssignedTo { get; set; }
         public string JobStatus { get; set; }
 
 
