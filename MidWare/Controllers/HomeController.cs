@@ -193,6 +193,7 @@ namespace MidWare.Controllers
             return View(@"/Views/Home/ProjectFeedDetail.cshtml", model);
         }
         //GET: Home/AwardedProjects/5
+
         public IActionResult AwardedProjects(string id)
         {
             if (string.IsNullOrEmpty(id))

@@ -19,19 +19,18 @@
                 <span><b>Rating</b><i class="glyphicon glyphicon-star"></i> @Model.ProjectFeed.Account.Rating</span>
                 <span class="txtgreen"><b>Payment Verified</b><i class="glyphicon glyphicon-usd"></i></span>
                 <span class="txtgreen"><b>Account Verified</b><i class="glyphicon glyphicon-ok"></i></span>
-                </div>
             </div>
+        </div>
 
-
+        @if (Model.ProjectFeed.Bids.Count > 0)
+        {
             <h3 class="ptitle">Proposals</h3>
             <div class="boxproject1" style="padding-bottom:0;">
-
-
                 @foreach (var bid in Model.ProjectFeed.Bids)
                 {
                     <p class="description">
                         <i>@bid.Comment</i><br />
-                        
+
                         <span>Submitted on @bid.BidDate</span>
                     </p>
                     <div class="boxproject skill">
@@ -39,20 +38,15 @@
                         <span><b>Submitted By</b><i class="glyphicon glyphicon-user"></i> @bid.BidByName</span>
                         <span><b>Estimated Time</b><i class="glyphicon glyphicon-time"></i> @bid.Duration Day</span>
                         <span><b>Value</b><i class="glyphicon glyphicon-usd"></i> @bid.BidValue</span>
-
                     </div>
+                    @if (string.IsNullOrEmpty(Model.ProjectFeed.AssignTo))
+                    {
+                        <a class="btnview pull-right" href="/Carrier/Assign/@Model.ProjectFeed.Id/@bid.BidBy/">Award Project</a>
+                    }
 
-
-                        @if (string.IsNullOrEmpty(Model.ProjectFeed.AssignTo))
-                        {
-                            <a class="btnview pull-right" href="/Carrier/Assign/@Model.ProjectFeed.Id/@bid.BidBy/">Award Project</a>
-                        }
-
-                        }
-
-
-                    </div>
-
-                </div>
+                }
+            </div>
+        }
+    </div>
 </div>
 
