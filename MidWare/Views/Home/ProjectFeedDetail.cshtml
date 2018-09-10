@@ -19,8 +19,8 @@
                 <span><b>Rating</b><i class="glyphicon glyphicon-star"></i> @Model.ProjectFeed.Account.Rating</span>
                 <span class="txtgreen"><b>Payment Verified</b><i class="glyphicon glyphicon-usd"></i> Yes</span>
                 <span class="txtgreen"><b>Account Verified</b><i class="glyphicon glyphicon-ok"></i> Yes</span>
-                <span class="txtgreen"><b>Budget</b><i class="glyphicon glyphicon-usd"></i> @Model[i].Budget</span>
-                <span class="txtgreen"><b>No. of Bids</b><i class="glyphicon glyphicon-usd"></i> @Model[i].BidCount</span>
+                <span class="txtgreen"><b>Budget</b><i class="glyphicon glyphicon-usd"></i> @Model.ProjectFeed.Budget</span>
+                <span class="txtgreen"><b>No. of Bids</b><i class="glyphicon glyphicon-usd"></i> @Model.ProjectFeed.BidCount</span>
             </div>
         </div>
 
@@ -41,10 +41,11 @@
                         <span><b>Estimated Time</b><i class="glyphicon glyphicon-time"></i> @bid.Duration Day</span>
                         <span><b>Value</b><i class="glyphicon glyphicon-usd"></i> @bid.BidValue</span>
                     </div>
-                    @if (string.IsNullOrEmpty(Model.ProjectFeed.AssignTo))
+                    <a class="btnview pull-right" href="/Carrier/Assign/@Model.ProjectFeed.Id/@bid.BidBy/">Award Project</a>
+                    @*@if (string.IsNullOrEmpty(Model.ProjectFeed.AssignTo))
                     {
                         <a class="btnview pull-right" href="/Carrier/Assign/@Model.ProjectFeed.Id/@bid.BidBy/">Award Project</a>
-                    }
+                    }*@
 
                 }
             </div>
