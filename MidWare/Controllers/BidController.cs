@@ -52,7 +52,12 @@ namespace MidWare.Controllers
 
                 // model.Account = new AccountModel(account);
             }
-            return View("/Views/Home/BidProposal.cshtml");
+            if (projectFeed.Type == 2 || projectFeed.Type == 3)
+            {
+                return View("/Views/Home/BidProposalMitAdjuster.cshtml");
+            }
+            else
+                return View("/Views/Home/BidProposal.cshtml");
         }
 
 
@@ -81,6 +86,31 @@ namespace MidWare.Controllers
             ViewData["Message"] = "Data successfully updated.";
 
             return RedirectToAction("GetProjectFeeds", "Home");
+        }
+
+
+        // POST: Bid/Create
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public IActionResult BidProposalMitAdjuster(BidMitAdjusterModel model, string returnUrl = null)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            ViewData["ReturnUrl"] = returnUrl;
+            Bid param = new Bid();
+            param.BidDate = DateTime.Now;
+            //TODO: Add user information in BidBy
+            param.BidBy = HttpContext.Session.GetString("accountId");
+            //param.BidValue = model.BidValue;
+            //param.Duration = model.Duration;
+            param.Comment = model.Comment;
+            //param.ProjectId = (object)TempData["projectId"];
+            var result = _repoProjectFeed.UpdateProject(param, TempData["projectId"].ToString());
+            ViewData["Message"] = "Data successfully updated.";
+            return View("/Views/Home/ProjectFeedList.cshtml");
         }
 
 
