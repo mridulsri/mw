@@ -23,6 +23,8 @@ namespace Domain.NoSql.Data.DomainRepository
         bool UpdateProjecActiveStatus(string projectId, bool status);
         bool AssignProject(string projId, string accId);
         List<ProjectFeed> GetProjectFeedByType(int typeId);
+        bool AddReport(string projId, string report, string reportFile);
+        bool AddInvoice(string projId, string invoice, string invoiceFile);
     }
 
     public class ProjectFeedRepository : IProjectFeedRepository
@@ -66,6 +68,7 @@ namespace Domain.NoSql.Data.DomainRepository
             }
             return false;
         }
+
         public bool UpdateProjecActiveStatus(string projectId, bool status)
         {
             try
@@ -156,7 +159,39 @@ namespace Domain.NoSql.Data.DomainRepository
             try
             {
                 var filter = Builders<ProjectFeed>.Filter.Eq("_id", ObjectId.Parse(projId));
-                var update = Builders<ProjectFeed>.Update.Set("assignedto", accId);
+                var update = Builders<ProjectFeed>.Update.Set("assignedto", accId).Set("jobstatus", "assign");
+                var result = _collection.UpdateOneAsync(filter, update).Result;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message);
+            }
+            return false;
+        }
+
+        public bool AddReport(string projId, string report, string reportFile)
+        {
+            try
+            {
+                var filter = Builders<ProjectFeed>.Filter.Eq("_id", ObjectId.Parse(projId));
+                var update = Builders<ProjectFeed>.Update.Set("report", report).Set("reportfile", reportFile).Set("jobstatus", "complete");
+                var result = _collection.UpdateOneAsync(filter, update).Result;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(ex.Message);
+            }
+            return false;
+        }
+
+        public bool AddInvoice(string projId, string invoice, string invoiceFile)
+        {
+            try
+            {
+                var filter = Builders<ProjectFeed>.Filter.Eq("_id", ObjectId.Parse(projId));
+                var update = Builders<ProjectFeed>.Update.Set("invoice", invoice).Set("invoicefile", invoiceFile).Set("jobstatus", "complete");
                 var result = _collection.UpdateOneAsync(filter, update).Result;
                 return true;
             }

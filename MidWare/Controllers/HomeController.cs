@@ -25,7 +25,7 @@ namespace MidWare.Controllers
             _repo = new ProjectFeedRepository();
             _accRepo = new AccountRepository();
 
-            
+
         }
 
         public IActionResult Index()
@@ -42,7 +42,7 @@ namespace MidWare.Controllers
                 return RedirectToAction("SignIn", "Account");
 
             }
-            if(loggedUser.AccountType ==1)
+            if (loggedUser.AccountType == 1)
             {
                 return RedirectToAction("Index", "Carrier");
             }
@@ -50,7 +50,7 @@ namespace MidWare.Controllers
             {
                 return RedirectToAction("GetProjectFeeds");
             }
-            
+
         }
 
         public IActionResult GetProjectFeeds()
@@ -82,7 +82,7 @@ namespace MidWare.Controllers
             ViewData["accType"] = loggedUser.AccountType;
             var model = new List<ProjectFeedModel>();
             List<ProjectFeed> list = null;
-            if(loggedUser.AccountType == 1)
+            if (loggedUser.AccountType == 1)
             {
                 list = _repo.GetProjectFeedCreatedBy(loggedUser.Id);
             }
@@ -90,7 +90,7 @@ namespace MidWare.Controllers
             {
                 list = _repo.GetAwardedProjectByAccountId(loggedUser.Id);
             }
-            
+
 
             if (list != null)
             {
@@ -221,6 +221,70 @@ namespace MidWare.Controllers
             ViewData["Message"] = "Job marked as comeplete.";
             return View(@"/Views/Home/ProjectFeedList.cshtml");
         }
+
+        [HttpGet]
+        public IActionResult SubmitReport(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return RedirectToAction("GetProjectFeeds");
+
+            var model = new SubmitReportModel();
+
+            var projectFeed = _repo.GetProjectById(id);
+
+            if (projectFeed != null)
+                model.ProjectFeed = new ProjectFeedModel(projectFeed);
+
+            var list = _repo.GetProjectFeeds();
+
+            if (list != null)
+            {
+                foreach (var item in list)
+                {
+                    model.ProjectFeedList.Add(new ProjectFeedModel(item));
+                }
+            }
+
+            model.AddInvoice = new AddInvoice()
+            {
+                ProjectFeedId = id
+            };
+            model.AddReport = new AddReport()
+            {
+                ProjectFeedId = id
+            };
+
+            if (projectFeed != null)
+                model.ProjectFeed = new ProjectFeedModel(projectFeed);
+
+            return View(@"/Views/Home/SubmitReport.cshtml", model);
+        }
+
+        [HttpPost]
+        public IActionResult SubmitReport(AddReport model)
+        {
+            if(ModelState.IsValid)
+            {
+                _repo.AddReport(model.ProjectFeedId, model.Report, "");
+                return RedirectToAction("MyFeed");
+            }
+
+            return RedirectToAction("SubmitReport", model.ProjectFeedId);
+        }
+
+        [HttpPost]
+        public IActionResult SubmitInvoice(AddInvoice model)
+        {
+            if (ModelState.IsValid)
+            {
+                _repo.AddInvoice(model.ProjectFeedId, model.Invoice, "");
+                return RedirectToAction("MyFeed");
+            }
+
+            return RedirectToAction("SubmitReport", model.ProjectFeedId);
+        }
+
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

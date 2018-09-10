@@ -14,6 +14,7 @@ namespace Domain.NoSql.Data.DomainEntites
             IsActive = true;
             CreatedDate = DateTime.Now;
             DueDate = DateTime.Now.AddDays(5);
+            JobStatus = "open"; // open, assign, complete, close
         }
 
         public int Type { get; set; }
@@ -30,6 +31,7 @@ namespace Domain.NoSql.Data.DomainEntites
 
         public string AssignedTo { get; set; }
         public string JobStatus { get; set; }
+        // public bool JobStatus { get; set; }
 
 
         public bool IsActive { get; set; }
